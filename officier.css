@@ -1,0 +1,541 @@
+/* ─── ESPACE OFFICIERS : DESIGN COMMUN ──────────────────────────
+   Chargé par les 9 pages du Menu Officier / Gérant, après leur
+   propre <style> et avant responsive.css. Contient la base commune
+   (autrefois recopiée dans chaque page) et harmonise les composants
+   de chaque page — cartes, titres, champs, boutons, lignes — sans
+   toucher à leur mise en page. Animations : officier.js. */
+
+/* ─── BASE ─────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+[hidden] { display: none !important; }
+
+:root {
+  --gold:       #F0B429;
+  --gold-dim:   #C8922A;
+  --gold-deep:  #7A4E10;
+  --cyan:       #00C8FF;
+  --bg:         #06060D;
+  --bg-mid:     #0D0D1A;
+  --text:       #E8DCC8;
+  --text-dim:   #8A7A62;
+  --nav-h:      64px;
+
+  --of-card-bg:   linear-gradient(180deg, rgba(18, 17, 32, 0.82), rgba(9, 9, 18, 0.82));
+  --of-border:    rgba(200, 146, 42, 0.22);
+  --of-border-hi: rgba(240, 180, 41, 0.5);
+  --of-radius:    14px;
+  --of-shadow:    0 14px 34px rgba(0, 0, 0, 0.35);
+  --of-ease:      cubic-bezier(.2, .8, .2, 1);
+  --of-spring:    cubic-bezier(.3, 1.4, .5, 1);
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Exo 2', sans-serif;
+  font-weight: 300;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+::selection { background: rgba(240, 180, 41, 0.35); color: #fff; }
+
+* { scrollbar-width: thin; scrollbar-color: rgba(240, 180, 41, 0.35) transparent; }
+
+#stars-canvas {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* Nébuleuse qui respire doucement */
+body::before {
+  content: '';
+  position: fixed;
+  inset: -10%;
+  z-index: 0;
+  background:
+    radial-gradient(ellipse 55% 45% at 50% 30%, rgba(200, 146, 42, 0.13) 0%, transparent 70%),
+    radial-gradient(ellipse 30% 25% at 80% 75%, rgba(0, 200, 255, 0.06) 0%, transparent 60%),
+    radial-gradient(ellipse 25% 20% at 15% 80%, rgba(200, 146, 42, 0.05) 0%, transparent 60%);
+  pointer-events: none;
+  animation: ofNebula 18s ease-in-out infinite alternate;
+}
+@keyframes ofNebula {
+  from { transform: translate3d(0, 0, 0) scale(1); }
+  to   { transform: translate3d(-2%, 2%, 0) scale(1.06); }
+}
+
+.content {
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;
+  padding-top: var(--nav-h);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* ─── EN-TÊTE DE PAGE ──────────────────────────────────────── */
+.page-header {
+  width: 100%;
+  max-width: 900px;
+  padding: 48px 24px 22px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  text-align: center;
+}
+
+/* Icône dans un médaillon avec anneau qui tourne */
+.page-header .page-icon {
+  order: -2;
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 84px;
+  height: 84px;
+  font-size: 2.4rem;
+  line-height: 1;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, rgba(240, 180, 41, 0.28), rgba(240, 180, 41, 0.04) 70%);
+  border: 1px solid rgba(240, 180, 41, 0.4);
+  box-shadow: 0 0 30px rgba(240, 180, 41, 0.18), inset 0 0 18px rgba(240, 180, 41, 0.12);
+  filter: none;
+  animation: ofIconIn 0.8s var(--of-spring) both, ofFloat 5s ease-in-out 0.8s infinite;
+}
+.page-header .page-icon::before {
+  content: '';
+  position: absolute;
+  inset: -7px;
+  border-radius: 50%;
+  border: 1px solid transparent;
+  border-top-color: var(--gold);
+  border-right-color: rgba(240, 180, 41, 0.3);
+  animation: ofSpin 6s linear infinite;
+}
+.page-header .page-icon::after {
+  content: '';
+  position: absolute;
+  inset: -14px;
+  border-radius: 50%;
+  border: 1px dashed rgba(240, 180, 41, 0.18);
+  animation: ofSpin 30s linear infinite reverse;
+}
+@keyframes ofIconIn { from { opacity: 0; transform: scale(0.4) rotate(-20deg); } }
+@keyframes ofFloat { 50% { transform: translateY(-5px); } }
+@keyframes ofSpin { to { transform: rotate(360deg); } }
+
+/* Petit libellé « Espace officiers » au-dessus du titre */
+.page-header::before {
+  content: 'Espace officiers';
+  order: -1;
+  margin-top: 14px;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: var(--gold-dim);
+  padding: 4px 12px;
+  border: 1px solid rgba(200, 146, 42, 0.3);
+  border-radius: 999px;
+  background: rgba(240, 180, 41, 0.05);
+  animation: ofFadeUp 0.6s var(--of-ease) 0.15s both;
+}
+
+.page-header h1 {
+  font-family: 'Orbitron', sans-serif;
+  font-weight: 900;
+  font-size: clamp(1.7rem, 5vw, 2.6rem);
+  letter-spacing: 0.14em;
+  background: linear-gradient(100deg, #C8922A 0%, #F0B429 35%, #FFF4C2 50%, #F0B429 65%, #C8922A 100%);
+  background-size: 250% 100%;
+  -webkit-background-clip: text;
+          background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: var(--gold);
+  filter: drop-shadow(0 0 18px rgba(240, 180, 41, 0.35));
+  animation: ofFadeUp 0.7s var(--of-ease) 0.25s both, ofShine 7s ease-in-out 1.2s infinite;
+}
+@keyframes ofShine {
+  0%, 60% { background-position: 100% 0; }
+  100%    { background-position: -150% 0; }
+}
+
+.page-subtitle {
+  max-width: 620px;
+  font-size: 0.9rem;
+  font-style: italic;
+  color: var(--text-dim);
+  letter-spacing: 0.05em;
+  line-height: 1.6;
+  animation: ofFadeUp 0.7s var(--of-ease) 0.35s both;
+}
+
+.page-divider {
+  width: 200px;
+  height: 1px;
+  margin-top: 8px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  box-shadow: 0 0 10px rgba(240, 180, 41, 0.5);
+  animation: ofGrow 0.9s var(--of-ease) 0.45s both;
+}
+@keyframes ofGrow { from { transform: scaleX(0); opacity: 0; } }
+@keyframes ofFadeUp { from { opacity: 0; transform: translateY(14px); } }
+
+/* ─── BARRE DES OUTILS (créée par officier.js) ─────────────── */
+.of-tools {
+  width: 100%;
+  max-width: 900px;
+  padding: 4px 24px 26px;
+  animation: ofFadeUp 0.7s var(--of-ease) 0.5s both;
+}
+.of-tools-track {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 6px;
+  border: 1px solid var(--of-border);
+  border-radius: 999px;
+  background: rgba(8, 8, 16, 0.6);
+  backdrop-filter: blur(8px);
+  scrollbar-width: none;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 18px, #000 calc(100% - 18px), transparent);
+          mask-image: linear-gradient(90deg, transparent, #000 18px, #000 calc(100% - 18px), transparent);
+}
+.of-tools-track::-webkit-scrollbar { display: none; }
+.of-tool {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 7px 14px;
+  border-radius: 999px;
+  font-family: 'Exo 2', sans-serif;
+  font-size: 0.74rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  color: var(--text-dim);
+  text-decoration: none;
+  white-space: nowrap;
+  border: 1px solid transparent;
+  transition: color 0.2s, background 0.2s, border-color 0.2s, transform 0.25s var(--of-spring);
+}
+.of-tool:hover, .of-tool:focus-visible {
+  color: var(--gold);
+  background: rgba(240, 180, 41, 0.08);
+  outline: none;
+  transform: translateY(-1px);
+}
+.of-tool.current {
+  color: var(--bg);
+  background: linear-gradient(135deg, var(--gold), var(--gold-dim));
+  box-shadow: 0 0 16px rgba(240, 180, 41, 0.35);
+}
+.of-tool-ico { font-size: 0.95rem; line-height: 1; }
+.of-tool-sep { flex-shrink: 0; width: 1px; margin: 6px 2px; background: var(--of-border); }
+
+/* ─── ZONE DE CONTENU ──────────────────────────────────────── */
+.page-body {
+  width: 100%;
+  max-width: 900px;
+  padding: 0 24px 80px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* ─── CARTES (toutes les pages) ────────────────────────────── */
+.doc-card,
+.report-card,
+.item-card,
+.bl-card,
+.abs-card,
+.tr-card,
+.agenda-rules,
+.agenda-day,
+.blame-table-wrap {
+  position: relative;
+  background: var(--of-card-bg);
+  border: 1px solid var(--of-border);
+  border-radius: var(--of-radius);
+  box-shadow: var(--of-shadow);
+  backdrop-filter: blur(8px);
+  transition: border-color 0.3s, box-shadow 0.3s, transform 0.35s var(--of-ease);
+}
+.doc-card { padding: 24px 28px; display: flex; flex-direction: column; gap: 12px; }
+.doc-card p { font-size: 0.88rem; color: var(--text); line-height: 1.65; }
+
+/* Reflet doré en haut de chaque carte */
+.doc-card::before,
+.report-card::before,
+.item-card::before,
+.bl-card::before,
+.abs-card::before,
+.tr-card::before,
+.agenda-rules::before,
+.agenda-day::before {
+  content: '';
+  position: absolute;
+  top: -1px; left: 12%; right: 12%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(240, 180, 41, 0.7), transparent);
+  pointer-events: none;
+}
+
+/* Cartes d'élément : soulèvement au survol */
+.report-card:hover,
+.item-card:hover,
+.agenda-day:hover {
+  border-color: var(--of-border-hi);
+  transform: translateY(-2px);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.45), 0 0 24px rgba(240, 180, 41, 0.08);
+}
+.agenda-day.is-today {
+  border-color: rgba(240, 180, 41, 0.6);
+  box-shadow: var(--of-shadow), 0 0 28px rgba(240, 180, 41, 0.12);
+}
+
+/* ─── TITRES DE CARTE / SECTION ────────────────────────────── */
+.bl-card-title,
+.abs-card-title,
+.tr-card-title,
+.responses-title,
+.reports-section-title {
+  position: relative;
+  padding-left: 14px;
+}
+.bl-card-title::before,
+.abs-card-title::before,
+.tr-card-title::before,
+.responses-title::before,
+.reports-section-title::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0.15em; bottom: 0.15em;
+  width: 3px;
+  border-radius: 2px;
+  background: linear-gradient(180deg, var(--gold), var(--gold-dim));
+  box-shadow: 0 0 8px rgba(240, 180, 41, 0.6);
+}
+.reports-section-title { border-bottom-color: var(--of-border); }
+.week-title { border-bottom-color: rgba(200, 146, 42, 0.22); }
+
+/* ─── CHAMPS DE FORMULAIRE ─────────────────────────────────── */
+.form-field label,
+.bl-field label,
+.abs-field label,
+.tr-field label {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--gold-dim);
+}
+.form-field input,
+.form-field select,
+.form-field textarea,
+.bl-field input,
+.bl-field select,
+.abs-field input,
+.abs-field select,
+.tr-field input,
+.tr-field textarea,
+.vote-message-form textarea,
+.vote-message-form input,
+.type-select-btn {
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.035);
+  border: 1px solid rgba(200, 146, 42, 0.28);
+  color: var(--text);
+  color-scheme: dark;
+  transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
+}
+.form-field input:hover,
+.form-field select:hover,
+.form-field textarea:hover,
+.bl-field input:hover,
+.abs-field input:hover,
+.tr-field input:hover,
+.tr-field textarea:hover,
+.type-select-btn:hover { border-color: rgba(240, 180, 41, 0.5); }
+.form-field input:focus,
+.form-field select:focus,
+.form-field textarea:focus,
+.bl-field input:focus,
+.bl-field select:focus,
+.abs-field input:focus,
+.abs-field select:focus,
+.tr-field input:focus,
+.tr-field textarea:focus,
+.vote-message-form textarea:focus,
+.vote-message-form input:focus,
+.type-select-btn:focus-visible {
+  outline: none;
+  border-color: var(--gold);
+  background: rgba(240, 180, 41, 0.06);
+  box-shadow: 0 0 0 3px rgba(240, 180, 41, 0.12);
+}
+.type-select-list,
+.mat-combo [role="listbox"] {
+  border-radius: 12px;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.6);
+}
+
+/* ─── BOUTONS ──────────────────────────────────────────────── */
+/* Forme et réactions communes ; les couleurs (vert / or / rouge)
+   restent celles de chaque page, elles portent le sens. */
+.page-body button,
+.confirm-modal button {
+  border-radius: 8px;
+  transition: background 0.2s, border-color 0.2s, color 0.2s, filter 0.2s, box-shadow 0.25s, transform 0.2s var(--of-spring);
+}
+.page-body button:not(:disabled):hover { transform: translateY(-1px); }
+.page-body button:not(:disabled):active,
+.confirm-modal button:not(:disabled):active { transform: scale(0.96); }
+.page-body button:focus-visible,
+.confirm-modal button:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--bg), 0 0 0 4px var(--gold);
+}
+.page-body .type-select-btn:not(:disabled):hover,
+.page-body .type-select-option:not(:disabled):hover { transform: none; }
+
+/* Bouton principal : dégradé or avec reflet qui passe */
+.report-submit,
+.tr-submit {
+  position: relative;
+  overflow: hidden;
+  border-radius: 10px;
+  box-shadow: 0 8px 22px rgba(240, 180, 41, 0.18);
+}
+.report-submit::after,
+.tr-submit::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(110deg, transparent 30%, rgba(255, 255, 255, 0.35) 50%, transparent 70%);
+  transform: translateX(-100%);
+  transition: transform 0.7s ease;
+  pointer-events: none;
+}
+.report-submit:not(:disabled):hover::after,
+.tr-submit:not(:disabled):hover::after { transform: translateX(100%); }
+.report-submit:not(:disabled):hover,
+.tr-submit:not(:disabled):hover { box-shadow: 0 10px 28px rgba(240, 180, 41, 0.3); }
+
+/* ─── LIGNES / ÉLÉMENTS DE LISTE ───────────────────────────── */
+.bl-row,
+.abs-row,
+.tr-item,
+.agenda-slot {
+  border-radius: 10px;
+  transition: border-color 0.25s, background 0.25s, transform 0.3s var(--of-ease);
+}
+.bl-row:hover,
+.abs-row:hover,
+.tr-item:hover,
+.agenda-slot:hover {
+  border-color: rgba(240, 180, 41, 0.45);
+  background: rgba(240, 180, 41, 0.05);
+}
+.tr-item:hover { transform: translateX(3px); }
+.tr-item { border-radius: 10px 10px 10px 10px; }
+
+/* ─── ÉTATS VIDES ──────────────────────────────────────────── */
+.bl-empty,
+.abs-empty,
+.tr-empty,
+.vote-messages-empty {
+  padding: 18px 16px;
+  text-align: center;
+  border: 1px dashed rgba(200, 146, 42, 0.25);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.015);
+}
+
+/* ─── BADGES & COMPTEURS ───────────────────────────────────── */
+.report-badge,
+.bl-count,
+.filter-count { border-radius: 999px; }
+
+/* ─── TABLEAUX ─────────────────────────────────────────────── */
+.blame-table-wrap { overflow: hidden; overflow-x: auto; }
+.blame-table tbody tr { transition: background 0.2s; }
+.blame-table tbody tr:hover { background: rgba(240, 180, 41, 0.05); }
+
+/* ─── POP-UP DE CONFIRMATION ───────────────────────────────── */
+.confirm-overlay { backdrop-filter: blur(6px); }
+.confirm-modal {
+  border-radius: 16px;
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.75);
+  transform: translateY(16px) scale(0.94);
+  transition: transform 0.4s var(--of-spring);
+}
+.confirm-overlay.show .confirm-modal { transform: none; }
+
+/* ─── APPARITION AU DÉFILEMENT (classes posées par officier.js) ── */
+.of-reveal { opacity: 0; transform: translateY(18px); }
+.of-reveal.of-in {
+  opacity: 1;
+  transform: none;
+  transition: opacity 0.6s var(--of-ease), transform 0.6s var(--of-ease);
+  transition-delay: var(--of-delay, 0ms);
+}
+
+/* ─── FOOTER ───────────────────────────────────────────────── */
+footer {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 28px 24px;
+  border-top: 1px solid rgba(200, 146, 42, 0.15);
+  text-align: center;
+}
+.logo-small {
+  height: 28px;
+  width: 28px;
+  object-fit: contain;
+  opacity: 0.5;
+  filter: drop-shadow(0 0 4px rgba(240, 180, 41, 0.4));
+  transition: opacity 0.3s, transform 0.6s var(--of-spring);
+}
+footer:hover .logo-small { opacity: 0.9; transform: rotate(-12deg) scale(1.1); }
+footer p {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.58rem;
+  letter-spacing: 0.25em;
+  color: var(--text-dim);
+  opacity: 0.6;
+}
+
+/* ─── MOBILE ───────────────────────────────────────────────── */
+@media (max-width: 600px) {
+  .page-header { padding: 34px 16px 16px; }
+  .page-header .page-icon { width: 70px; height: 70px; font-size: 2rem; }
+  .of-tools { padding: 2px 16px 20px; }
+  .page-body { padding: 0 16px 60px; }
+  .doc-card { padding: 20px 18px; }
+}
+
+@media print {
+  .of-reveal { opacity: 1; transform: none; }
+  .of-tools { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body::before,
+  .page-header .page-icon, .page-header .page-icon::before, .page-header .page-icon::after,
+  .page-header::before, .page-header h1, .page-subtitle, .page-divider, .of-tools { animation: none !important; }
+  .of-reveal { opacity: 1; transform: none; }
+  .page-body *, .confirm-modal { transition: none !important; }
+}
