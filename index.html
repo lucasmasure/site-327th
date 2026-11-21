@@ -1,0 +1,925 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <script src="site-editor.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>327th Corps Stellaire - Accueil</title>
+
+  <meta property="og:title" content="327th Corps Stellaire">
+  <meta property="og:description" content="Par les étoiles, pour la République. Accédez aux informations du 327ème Corps Stellaire.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://lucasmasure.github.io/site327th/">
+  <meta property="og:image" content="https://lucasmasure.github.io/site327th/Logo_327th.png">
+  <meta name="theme-color" content="#C8922A">
+
+  <!-- ── Ajout à l'écran d'accueil (iOS/Android) ─────────────── -->
+  <link rel="apple-touch-icon" href="Logo_327th.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="327th">
+  <link rel="manifest" href="manifest.json">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Exo+2:ital,wght@0,300;0,400;0,600;1,300&display=swap" rel="stylesheet">
+
+  <link rel="icon" type="image/png" href="Logo_327th.png">
+
+  <style>
+    /* ─── RESET & BASE ─────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --gold:       #F0B429;
+      --gold-dim:   #C8922A;
+      --gold-deep:  #7A4E10;
+      --cyan:       #00C8FF;
+      --bg:         #06060D;
+      --bg-mid:     #0D0D1A;
+      --text:       #E8DCC8;
+      --text-dim:   #8A7A62;
+      --nav-h:      84px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Exo 2', sans-serif;
+      font-weight: 300;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ─── CANVAS ÉTOILES ───────────────────────────────────── */
+    #stars-canvas {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    /* ─── NÉBULEUSE (fond radial doré) ────────────────────── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      background:
+        radial-gradient(ellipse 60% 50% at 50% 40%, rgba(200,146,42,0.12) 0%, transparent 70%),
+        radial-gradient(ellipse 30% 25% at 75% 70%, rgba(0,200,255,0.06) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    /* ─── CONTENU PRINCIPAL ────────────────────────────────── */
+    .content {
+      position: relative;
+      z-index: 1;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding-top: var(--nav-h);
+    }
+
+    /* ─── HERO ─────────────────────────────────────────────── */
+    #hero {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 60px 24px 80px;
+      gap: 0;
+    }
+
+    /* Ligne décorative supérieure */
+
+    .hero-logo {
+      width: 300px;
+      height: 300px;
+      object-fit: contain;
+      margin-bottom: 32px;
+      filter:
+        drop-shadow(0 0 20px rgba(240,180,41,0.6))
+        drop-shadow(0 0 60px rgba(240,180,41,0.2));
+      animation: logoFloat 6s ease-in-out infinite, logoPulse 4s ease-in-out infinite;
+    }
+
+    @keyframes logoFloat {
+      0%, 100% { transform: translateY(0px); }
+      50%       { transform: translateY(-10px); }
+    }
+
+    @keyframes logoPulse {
+      0%, 100% { filter: drop-shadow(0 0 20px rgba(240,180,41,0.6)) drop-shadow(0 0 60px rgba(240,180,41,0.2)); }
+      50%       { filter: drop-shadow(0 0 30px rgba(240,180,41,0.9)) drop-shadow(0 0 80px rgba(240,180,41,0.35)); }
+    }
+
+    .hero-number {
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 900;
+      font-size: clamp(5rem, 15vw, 10rem);
+      line-height: 0.9;
+      letter-spacing: -0.02em;
+      /* Dégradé or */
+      background: linear-gradient(160deg, #FFF4C2 0%, #F0B429 35%, #C8922A 65%, #7A4E10 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 8px;
+      /* Légère ombre pour profondeur */
+      filter: drop-shadow(0 4px 24px rgba(240,180,41,0.35));
+    }
+
+    .hero-name {
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 400;
+      font-size: clamp(1rem, 3.5vw, 1.8rem);
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--text);
+      margin-bottom: 28px;
+    }
+
+    /* Séparateur doré */
+    .hero-divider {
+      width: 120px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+      margin-bottom: 28px;
+    }
+
+    .hero-slogan {
+      font-family: 'Exo 2', sans-serif;
+      font-weight: 300;
+      font-size: clamp(0.85rem, 2.2vw, 1.05rem);
+      letter-spacing: 0.18em;
+      color: var(--text-dim);
+      margin-bottom: 48px;
+    }
+
+    .hero-slogan em {
+      font-style: italic;
+      color: var(--gold);
+      font-weight: 300;
+    }
+
+    /* Bouton CTA */
+    .enter-btn {
+      display: inline-block;
+      position: relative;
+      padding: 14px 40px;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      text-decoration: none;
+      color: var(--bg);
+      background: linear-gradient(135deg, var(--gold) 0%, var(--gold-dim) 100%);
+      border: none;
+      clip-path: polygon(12px 0%, 100% 0%, calc(100% - 12px) 100%, 0% 100%);
+      transition: filter 0.25s, transform 0.2s;
+    }
+
+    .enter-btn:hover {
+      filter: brightness(1.15);
+      transform: translateY(-2px);
+    }
+
+    /* ─── FOOTER ───────────────────────────────────────────── */
+    footer {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      padding: 28px 24px;
+      border-top: 1px solid rgba(200,146,42,0.15);
+      text-align: center;
+    }
+
+    .logo-small {
+      height: 28px;
+      width: 28px;
+      object-fit: contain;
+      opacity: 0.5;
+      filter: drop-shadow(0 0 4px rgba(240,180,41,0.4));
+    }
+
+    footer p {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.58rem;
+      letter-spacing: 0.25em;
+      color: var(--text-dim);
+      opacity: 0.6;
+    }
+
+    /* ─── ÉCRAN DE CONNEXION (BOOT) ────────────────────────── */
+    @property --boot-hole {
+      syntax: '<length-percentage>';
+      inherits: false;
+      initial-value: 0%;
+    }
+
+    #boot-screen {
+      --boot-hole: 0%;
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 18px;
+      overflow: hidden;
+      background:
+        radial-gradient(ellipse 60% 50% at 50% 42%, rgba(200,146,42,0.13) 0%, transparent 70%),
+        radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,0.75) 100%),
+        var(--bg);
+      -webkit-mask-image: radial-gradient(circle at 50% 42%, transparent var(--boot-hole), #000 calc(var(--boot-hole) + 1px));
+              mask-image: radial-gradient(circle at 50% 42%, transparent var(--boot-hole), #000 calc(var(--boot-hole) + 1px));
+      cursor: pointer;
+    }
+
+    /* Grille holographique en perspective */
+    #boot-screen::before {
+      content: '';
+      position: absolute;
+      left: -50%; right: -50%; bottom: -10%;
+      height: 55%;
+      background:
+        linear-gradient(rgba(240,180,41,0.14) 1px, transparent 1px) 0 0 / 60px 60px,
+        linear-gradient(90deg, rgba(240,180,41,0.14) 1px, transparent 1px) 0 0 / 60px 60px;
+      transform: perspective(420px) rotateX(62deg);
+      transform-origin: top;
+      -webkit-mask-image: linear-gradient(transparent, #000 30%, #000 60%, transparent);
+              mask-image: linear-gradient(transparent, #000 30%, #000 60%, transparent);
+      animation: bootGrid 3s linear infinite;
+      opacity: 0.55;
+      pointer-events: none;
+    }
+    @keyframes bootGrid { to { background-position: 0 60px, 0 0; } }
+
+    /* Lignes de balayage + bande lumineuse qui descend */
+    #boot-screen::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(transparent 0%, rgba(240,180,41,0.07) 50%, transparent 100%) 0 -30vh / 100% 30vh no-repeat,
+        repeating-linear-gradient(0deg, rgba(240,180,41,0.025) 0 1px, transparent 1px 4px);
+      animation: bootSweep 2.6s linear infinite;
+      pointer-events: none;
+    }
+    @keyframes bootSweep { to { background-position: 0 130vh, 0 0; } }
+
+    /* Sortie : ouverture circulaire depuis le logo */
+    #boot-screen.done {
+      animation: bootOpen 1s cubic-bezier(.7,0,.2,1) forwards;
+      pointer-events: none;
+    }
+    @keyframes bootOpen { to { --boot-hole: 150%; } }
+    @supports not (mask-image: radial-gradient(circle, #000, #000)) {
+      #boot-screen.done { animation: none; opacity: 0; transition: opacity 0.7s ease; }
+    }
+
+    /* Coins façon HUD */
+    .boot-corner {
+      position: absolute;
+      width: 34px; height: 34px;
+      border: 2px solid rgba(240,180,41,0.55);
+      opacity: 0;
+      animation: bootFadeIn 0.5s ease 0.1s forwards;
+    }
+    .boot-corner.tl { top: 22px; left: 22px; border-right: 0; border-bottom: 0; }
+    .boot-corner.tr { top: 22px; right: 22px; border-left: 0; border-bottom: 0; }
+    .boot-corner.bl { bottom: 22px; left: 22px; border-right: 0; border-top: 0; }
+    .boot-corner.br { bottom: 22px; right: 22px; border-left: 0; border-top: 0; }
+    .boot-meta {
+      position: absolute;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.55rem;
+      letter-spacing: 0.22em;
+      color: rgba(240,180,41,0.45);
+      text-transform: uppercase;
+      opacity: 0;
+      animation: bootFadeIn 0.5s ease 0.3s forwards;
+    }
+    .boot-meta.tl { top: 30px; left: 66px; }
+    .boot-meta.tr { top: 30px; right: 66px; text-align: right; }
+    @keyframes bootFadeIn { to { opacity: 1; } }
+
+    /* Logo + anneaux */
+    .boot-logo-wrap {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      place-items: center;
+      width: 290px;
+      height: 290px;
+    }
+    .boot-logo-wrap > * { grid-area: 1 / 1; }
+
+    .boot-hud { width: 100%; height: 100%; overflow: visible; }
+    .boot-hud circle { fill: none; transform-origin: 50% 50%; }
+    .boot-ticks { stroke: rgba(240,180,41,0.35); stroke-width: 6; stroke-dasharray: 1 6.33; animation: bootSpin 30s linear infinite; }
+    .boot-track { stroke: rgba(240,180,41,0.12); stroke-width: 2; }
+    .boot-progress {
+      stroke: var(--gold);
+      stroke-width: 3;
+      stroke-linecap: round;
+      stroke-dasharray: 597;
+      stroke-dashoffset: 597;
+      transform: rotate(-90deg);
+      filter: drop-shadow(0 0 6px rgba(240,180,41,0.8));
+      transition: stroke-dashoffset 0.6s cubic-bezier(.4,0,.2,1);
+    }
+    .boot-arc {
+      stroke: var(--cyan);
+      stroke-width: 1.5;
+      stroke-dasharray: 60 380;
+      opacity: 0.7;
+      animation: bootSpin 2.4s linear infinite reverse;
+    }
+    .boot-arc.b { stroke: var(--gold-dim); stroke-dasharray: 20 120; opacity: 0.5; animation: bootSpin 4s linear infinite; }
+    @keyframes bootSpin { to { transform: rotate(360deg); } }
+
+    .boot-logo {
+      width: 175px;
+      height: 175px;
+      object-fit: contain;
+      filter: drop-shadow(0 0 18px rgba(240,180,41,0.55));
+      animation: bootLogoIn 1.1s cubic-bezier(.2,.8,.2,1) both, bootLogoPulse 2s ease-in-out 1.1s infinite;
+    }
+    @keyframes bootLogoIn {
+      0%   { opacity: 0; transform: scale(0.6); filter: blur(10px) drop-shadow(0 0 0 rgba(240,180,41,0)); }
+      60%  { opacity: 1; }
+      100% { opacity: 1; transform: scale(1); filter: blur(0) drop-shadow(0 0 18px rgba(240,180,41,0.55)); }
+    }
+    @keyframes bootLogoPulse {
+      0%, 100% { filter: drop-shadow(0 0 14px rgba(240,180,41,0.45)); }
+      50%      { filter: drop-shadow(0 0 26px rgba(240,180,41,0.85)); }
+    }
+
+    /* Onde de choc à l'accès autorisé */
+    .boot-shock {
+      width: 175px; height: 175px;
+      border-radius: 50%;
+      border: 2px solid var(--gold);
+      opacity: 0;
+      pointer-events: none;
+    }
+    #boot-screen.granted .boot-shock { animation: bootShock 0.9s cubic-bezier(.2,.8,.2,1) forwards; }
+    @keyframes bootShock {
+      0%   { opacity: 0.9; transform: scale(1); }
+      100% { opacity: 0;   transform: scale(4); border-width: 0.5px; }
+    }
+    #boot-screen.granted .boot-progress { stroke: #FFF4C2; }
+
+    .boot-pct {
+      position: relative;
+      z-index: 1;
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 900;
+      font-size: 1.7rem;
+      letter-spacing: 0.08em;
+      color: var(--gold);
+      text-shadow: 0 0 18px rgba(240,180,41,0.5);
+      font-variant-numeric: tabular-nums;
+      line-height: 1;
+    }
+    .boot-pct small { font-size: 0.55em; opacity: 0.6; margin-left: 2px; }
+
+    .boot-title {
+      position: relative;
+      z-index: 1;
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 700;
+      font-size: 0.95rem;
+      letter-spacing: 0.32em;
+      color: var(--gold);
+      text-transform: uppercase;
+      text-align: center;
+      min-height: 1.2em;
+      padding: 0 16px;
+    }
+    .boot-title .scramble { color: var(--cyan); opacity: 0.7; }
+
+    /* Journal des étapes */
+    .boot-log {
+      position: relative;
+      z-index: 1;
+      width: min(340px, 82vw);
+      height: 5.6em;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      gap: 3px;
+      overflow: hidden;
+      font-family: 'Exo 2', monospace;
+      font-size: 0.72rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      -webkit-mask-image: linear-gradient(transparent, #000 45%);
+              mask-image: linear-gradient(transparent, #000 45%);
+    }
+    .boot-line {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      animation: bootLineIn 0.35s ease both;
+    }
+    .boot-line::before { content: '›'; color: var(--gold-dim); margin-right: -4px; }
+    .boot-line span:first-of-type { flex: 1; }
+    .boot-line .ok { color: #7fe0a0; letter-spacing: 0.15em; }
+    .boot-line .wait { color: var(--gold); animation: bootBlink 0.8s steps(2) infinite; }
+    .boot-line.final { color: var(--gold); font-weight: 600; }
+    @keyframes bootLineIn { from { opacity: 0; transform: translateY(8px); } }
+    @keyframes bootBlink { 50% { opacity: 0.2; } }
+
+    .boot-skip {
+      position: absolute;
+      bottom: 30px;
+      font-family: 'Exo 2', sans-serif;
+      font-size: 0.62rem;
+      letter-spacing: 0.25em;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      opacity: 0;
+      animation: bootFadeIn 0.6s ease 1s forwards;
+    }
+    .boot-skip kbd {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.9em;
+      border: 1px solid rgba(200,146,42,0.35);
+      border-radius: 3px;
+      padding: 1px 6px;
+      margin: 0 3px;
+    }
+
+    @media (max-width: 480px) {
+      .boot-logo-wrap { width: 240px; height: 240px; }
+      .boot-logo { width: 145px; height: 145px; }
+      .boot-shock { width: 145px; height: 145px; }
+      .boot-title { font-size: 0.78rem; letter-spacing: 0.24em; }
+      .boot-meta { display: none; }
+      .boot-corner { width: 24px; height: 24px; }
+    }
+
+    /* Le contenu apparaît après la connexion */
+    body.booting .content,
+    body.booting nav,
+    body.booting footer {
+      opacity: 0;
+    }
+
+    .content, nav, footer {
+      transition: opacity 0.9s ease;
+    }
+
+    /* Entrée en cascade de l'accueil */
+    body.boot-reveal #hero > * { animation: heroIn 0.9s cubic-bezier(.2,.8,.2,1) backwards; }
+    body.boot-reveal #hero > .hero-logo {
+      animation: heroLogoIn 1.1s cubic-bezier(.2,.8,.2,1) backwards,
+                 logoFloat 6s ease-in-out 1.1s infinite,
+                 logoPulse 4s ease-in-out infinite;
+    }
+    body.boot-reveal #hero > :nth-child(2) { animation-delay: 0.25s; }
+    body.boot-reveal #hero > :nth-child(3) { animation-delay: 0.4s; }
+    body.boot-reveal #hero > :nth-child(4) { animation-name: heroDivider; animation-delay: 0.55s; }
+    body.boot-reveal #hero > :nth-child(5) { animation-delay: 0.7s; }
+    @keyframes heroIn { from { opacity: 0; transform: translateY(24px); filter: blur(6px); } }
+    @keyframes heroLogoIn { from { opacity: 0; transform: scale(0.75); } }
+    @keyframes heroDivider { from { opacity: 0; transform: scaleX(0); } }
+
+    /* ─── REDUCED MOTION ───────────────────────────────────── */
+    @media (prefers-reduced-motion: reduce) {
+      .hero-logo { animation: none; }
+      #boot-screen, #boot-screen::before, #boot-screen::after, #boot-screen * { animation: none !important; }
+      body.boot-reveal #hero > * { animation: none !important; }
+    }
+
+
+  </style>
+  <link rel="stylesheet" href="responsive.css">
+  <script>
+    // Intro déjà vue pendant cette visite : la masquer dès le premier affichage
+    try { if (sessionStorage.getItem('327th_boot_seen') === '1') document.documentElement.classList.add('boot-seen'); } catch (e) {}
+  </script>
+  <style>.boot-seen #boot-screen { display: none; }</style>
+</head>
+<body class="booting">
+
+  <!-- ─── ÉCRAN DE CONNEXION ─────────────────────────────── -->
+  <div id="boot-screen" role="status" aria-live="polite" aria-label="Chargement du site">
+    <span class="boot-corner tl"></span><span class="boot-corner tr"></span>
+    <span class="boot-corner bl"></span><span class="boot-corner br"></span>
+    <span class="boot-meta tl">Holonet · Canal 327</span>
+    <span class="boot-meta tr" id="bootClock">--:--:--</span>
+    <div class="boot-logo-wrap">
+      <svg class="boot-hud" viewBox="0 0 230 230" aria-hidden="true">
+        <circle class="boot-ticks" cx="115" cy="115" r="110"></circle>
+        <circle class="boot-track" cx="115" cy="115" r="95"></circle>
+        <circle class="boot-progress" id="bootProgress" cx="115" cy="115" r="95"></circle>
+        <circle class="boot-arc" cx="115" cy="115" r="82"></circle>
+        <circle class="boot-arc b" cx="115" cy="115" r="76"></circle>
+      </svg>
+      <div class="boot-shock"></div>
+      <img src="Logo_327th.png" alt="" class="boot-logo">
+    </div>
+    <div class="boot-pct" id="bootPct">0<small>%</small></div>
+    <div class="boot-title" id="bootTitle"></div>
+    <div class="boot-log" id="bootLog"></div>
+    <div class="boot-skip">Cliquez ou <kbd>Espace</kbd> pour passer</div>
+  </div>
+
+  <canvas id="stars-canvas"></canvas>
+
+  <nav>
+    <div class="nav-logo">
+      <img src="Logo_327th.png" alt="Logo 327th" class="logo-img">
+      <span class="nav-brand">327TH CORPS STELLAIRE</span>
+    </div>
+
+    <!-- Bouton hamburger (visible uniquement sur mobile) -->
+    <button class="nav-toggle" id="navToggle" aria-label="Ouvrir le menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+
+    <div class="nav-links" id="navLinks">
+    <a href="index.html" class="active">Accueil</a>
+    
+
+      <!-- MENU DÉROULANT 327th du mois-->
+
+    <div class="dropdown">
+  <a href="327mois.html" class="dropbtn">👑​ | 327th du mois  ⌄</a>
+  <div class="dropdown-content">
+    <a href="anciens.html">👑​​ | Anciens </a>
+  </div>
+ </div>
+
+    <!-- MENU DÉROULANT Informations-->
+
+    <div class="dropdown">
+      <button class="dropbtn">📄 | Informations ⌄</button>
+      <div class="dropdown-content">
+        <a href="effectif.html">📁 | Effectif</a>
+        <a href="prerequis.html">📈 | Prérequis promo</a>
+        <a href="règlement.html">📋 | Règlement intérieur</a>
+        <a href="serment.html">📜​ | Serment</a>
+        <a href="mando.html">🈵​ | Mando'a</a>
+        <a href="https://lucasmasure.github.io/livre-stellaire/" class="active">📚 | Livre Stellaire</a>
+        <a href="cmdmission.html">🎭| CMD de mission 327th</a>
+        <a href="planningentrainement.html">🏋️ | Planning entraînement</a>
+      </div>
+    </div>
+    
+    <!-- MENU DÉROULANT Formations-->
+
+   <div class="dropdown">
+      <button class="dropbtn">📄 | Formations ⌄</button>
+      <div class="dropdown-content">
+        <div class="dropdown">
+          <a href="recrutement.html" class="dropbtn">🗄️ | Recrutement 327th ⌄</a>
+          <div class="dropdown-content">
+            <a href="formulairerecrutement.html">📝 | Formulaire de recrutement</a>
+          </div>
+        </div>
+        <div class="dropdown">
+         <button class="dropbtn">🚀 | Véhicules ⌄</button>
+         <div class="dropdown-content">
+          <a href="barc.html">🛑 | Barc Speeder</a>
+          <a href="tx427.html">🛢️ | TX-427</a>
+          <a href="atot.html">🚨 | ATOT</a>
+         </div>
+        </div>
+        <a href="sousoff.html">🗃️ | Formation sous-off</a>
+        <a href="radio.html">📡 | Formation Radio</a>
+        <a href="formationreg.html">📑​ | Formation régimentaire</a>
+        <div class="dropdown">
+          <a href="https://youtu.be/4aqvFhyQHog" class="dropbtn">📚 | Documents Tutorat ⌄</a>
+          <div class="dropdown-content">
+            <a href="systèmetutorat.html">📜 | Système tutorat</a>
+            <a href="ressourcestutorat.html">🗂️ | Ressources tutorat</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+      <!-- MENU DÉROULANT Médailles internes-->
+
+    <a href="médailles.html">🎖️​ | Médailles internes</a>
+
+          <!-- MENU DÉROULANT Spécialiations-->
+
+    <div class="dropdown">
+         <button class="dropbtn">📚​ | Spécialisations  ⌄</button>
+         <div class="dropdown-content">
+          <a href="https://lucasmasure.github.io/7-me-L-gion/" target="_blank" rel="noopener noreferrer" class="dropbtn">💣 7ème Légion </a>
+          <a href="https://lucasmasure.github.io/Compagnie-K/" target="_blank" rel="noopener noreferrer" class="dropbtn">🏹 Compagnie K </a>
+          <a href="https://lucasmasure.github.io/Compagnie-Bacta/" target="_blank" rel="noopener noreferrer" class="dropbtn">💉 Compagnie Bacta </a>
+          <a href="https://lucasmasure.github.io/arc-327th/" target="_blank" rel="noopener noreferrer" class="dropbtn">🗡️ ARC-Rogue </a>
+          <a href="rcreg.html">⚔️ RC Régimentaire</a>
+         </div>
+    </div>
+
+    <a href="tenues.html">🧥 | Tenues</a>
+    <!-- MENU DÉROULANT Rapport-->
+    <div class="dropdown dropdown-right">
+      <a href="rapport.html" class="dropbtn">📝 | Rapport  ⌄</a>
+      <div class="dropdown-content">
+        <a href="rapportunites.html">📋 | Rapport sur unités</a>
+      </div>
+    </div>
+    </div><!-- /nav-links -->
+  </nav>
+
+  <div class="content">
+    <section id="hero">
+
+      <img src="Logo_327th.png" alt="327th Logo" class="hero-logo">
+
+      <h1 class="hero-number">327TH</h1>
+
+      <h2 class="hero-name">Corps Stellaire</h2>
+
+      <div class="hero-divider"></div>
+
+      <div class="hero-slogan">
+        <em>Vivre dans l'honneur, mourir dans la gloire</em>
+      </div>
+
+
+    </section>
+  </div>
+
+  <footer>
+    <img src="Logo_327th.png" alt="Logo 327th Petit" class="logo-small">
+    <p>327TH CORPS STELLAIRE &mdash; USAGE INTERNE UNIQUEMENT</p>
+  </footer>
+
+  <script>
+    // ── Écran de connexion (boot) ───────────────────────────
+    (function () {
+      const screen   = document.getElementById('boot-screen');
+      const pctEl    = document.getElementById('bootPct');
+      const titleEl  = document.getElementById('bootTitle');
+      const logEl    = document.getElementById('bootLog');
+      const progress = document.getElementById('bootProgress');
+      const clockEl  = document.getElementById('bootClock');
+      const reduced  = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const RING     = 597; // circonférence de l'anneau (r = 95)
+      const TITLE    = '327th Corps Stellaire';
+
+      // Déjà vue pendant cette visite : on ne la rejoue pas à chaque retour à l'accueil
+      let seen = false;
+      try { seen = sessionStorage.getItem('327th_boot_seen') === '1'; } catch (e) {}
+
+      // Étapes affichées pendant la "connexion"
+      const steps = [
+        { text: 'Liaison holonet',             pct: 22,  delay: 350 },
+        { text: 'Authentification République', pct: 48,  delay: 650 },
+        { text: 'Décryptage des transmissions', pct: 74, delay: 650 },
+        { text: 'Chargement des données 327th', pct: 100, delay: 650 }
+      ];
+
+      let finished = false;
+      let shown = 0;
+      const timers = [];
+
+      function later(fn, ms) { timers.push(setTimeout(fn, ms)); }
+
+      function finish() {
+        if (finished) return;
+        finished = true;
+        timers.forEach(clearTimeout);
+        try { sessionStorage.setItem('327th_boot_seen', '1'); } catch (e) {}
+        document.body.classList.remove('booting');
+        document.body.classList.add('boot-reveal');
+        if (!screen) return;
+        screen.classList.add('done');
+        // Retire l'overlay du DOM après l'ouverture
+        setTimeout(() => screen.remove(), 1100);
+      }
+
+      if (!screen || reduced || seen) {
+        if (screen) screen.remove();
+        finish();
+        return;
+      }
+
+      // Possibilité de passer l'animation d'un clic / d'une touche
+      screen.addEventListener('click', finish);
+      window.addEventListener('keydown', finish, { once: true });
+
+      // Horloge du coin
+      const tick = () => { if (clockEl) clockEl.textContent = new Date().toLocaleTimeString('fr-FR'); };
+      tick();
+      const clock = setInterval(() => { if (finished) clearInterval(clock); else tick(); }, 1000);
+
+      // Compteur qui monte en douceur vers la cible
+      let target = 0;
+      (function count() {
+        if (finished) return;
+        if (shown < target) shown = Math.min(target, shown + Math.max(1, Math.ceil((target - shown) / 8)));
+        pctEl.firstChild.nodeValue = shown;
+        requestAnimationFrame(count);
+      })();
+      function setProgress(pct) {
+        target = pct;
+        progress.style.strokeDashoffset = RING * (1 - pct / 100);
+      }
+
+      // Titre qui se « décode » lettre par lettre
+      const GLYPHS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789#%&*+<>/';
+      (function decode(frame) {
+        if (finished) return;
+        const fixed = Math.floor(frame / 2);
+        let html = '';
+        for (let i = 0; i < TITLE.length; i++) {
+          const c = TITLE[i];
+          if (i < fixed || c === ' ') html += c;
+          else html += '<span class="scramble">' + GLYPHS[Math.floor(Math.random() * GLYPHS.length)] + '</span>';
+        }
+        titleEl.innerHTML = html;
+        if (fixed <= TITLE.length) setTimeout(() => decode(frame + 1), 35);
+      })(-10);
+
+      // Journal : chaque étape passe de « … » à « OK »
+      function addLine(text, final) {
+        const line = document.createElement('div');
+        line.className = 'boot-line' + (final ? ' final' : '');
+        line.innerHTML = '<span></span>' + (final ? '' : '<span class="wait">…</span>');
+        line.firstChild.textContent = text;
+        logEl.appendChild(line);
+        return line;
+      }
+
+      let t = 0;
+      let prev = null;
+      steps.forEach((step, i) => {
+        t += step.delay;
+        later(() => {
+          if (prev) { prev.lastChild.className = 'ok'; prev.lastChild.textContent = 'OK'; }
+          prev = addLine(step.text);
+          setProgress(step.pct);
+        }, t);
+      });
+      t += 600;
+      later(() => {
+        if (prev) { prev.lastChild.className = 'ok'; prev.lastChild.textContent = 'OK'; }
+        addLine('Accès autorisé', true);
+        screen.classList.add('granted');
+      }, t);
+      later(finish, t + 700);
+
+      // Sécurité : ne jamais bloquer plus de 6 secondes
+      setTimeout(finish, 6000);
+    })();
+
+    // ── Menu mobile (hamburger, arborescence complète affichée) ──
+    (function () {
+      const navToggle = document.getElementById('navToggle');
+      const navLinks  = document.getElementById('navLinks');
+      const mobileMQ  = window.matchMedia('(max-width: 1100px)');
+
+      function closeMenu() {
+        navLinks.classList.remove('open');
+        navToggle.classList.remove('open');
+        navToggle.setAttribute('aria-expanded', 'false');
+        document.body.style.overflow = ''; // réactive le défilement de la page
+      }
+
+      // Ouverture / fermeture du panneau
+      navToggle.addEventListener('click', () => {
+        const isOpen = navLinks.classList.toggle('open');
+        navToggle.classList.toggle('open', isOpen);
+        navToggle.setAttribute('aria-expanded', String(isOpen));
+        // Bloque le défilement de la page derrière le menu plein écran
+        document.body.style.overflow = isOpen ? 'hidden' : '';
+      });
+
+      // Sur mobile : tout le menu est déjà déplié, un appui sur
+      // n'importe quel lien navigue directement et referme le panneau
+      navLinks.addEventListener('click', (e) => {
+        if (!mobileMQ.matches) return; // sur PC : comportement au survol inchangé
+        if (e.target.closest('a')) closeMenu();
+      });
+
+      // Retour au mode PC : on nettoie l'état mobile
+      mobileMQ.addEventListener('change', (mq) => {
+        if (!mq.matches) closeMenu();
+      });
+    })();
+
+    // ── Étoiles + étoiles filantes ──────────────────────────
+    const canvas = document.getElementById('stars-canvas');
+    const ctx    = canvas.getContext('2d');
+
+    let W, H, stars = [], shooters = [];
+
+    function resize() {
+      W = canvas.width  = window.innerWidth;
+      H = canvas.height = window.innerHeight;
+    }
+
+    function mkStar() {
+      return {
+        x: Math.random() * W,
+        y: Math.random() * H,
+        r: Math.random() * 1.2 + 0.2,
+        a: Math.random(),
+        da: (Math.random() * 0.004 + 0.001) * (Math.random() < 0.5 ? 1 : -1),
+        // Teinte : blanc froid ou légèrement dorée
+        gold: Math.random() < 0.25
+      };
+    }
+
+    function initStars(n = 280) {
+      stars = Array.from({ length: n }, mkStar);
+    }
+
+    function mkShooter() {
+      const angle = Math.PI / 6 + Math.random() * Math.PI / 8; // ~30–50°
+      const speed = 6 + Math.random() * 6;
+      return {
+        x: Math.random() * W * 0.7,
+        y: Math.random() * H * 0.4,
+        vx: Math.cos(angle) * speed,
+        vy: Math.sin(angle) * speed,
+        len: 60 + Math.random() * 80,
+        life: 1,
+        decay: 0.018 + Math.random() * 0.012
+      };
+    }
+
+    let shooterTimer = 0;
+
+    function draw(ts) {
+      ctx.clearRect(0, 0, W, H);
+
+      // Étoiles fixes
+      for (const s of stars) {
+        s.a += s.da;
+        if (s.a > 1) s.da *= -1;
+        if (s.a < 0.1) s.da *= -1;
+        ctx.beginPath();
+        ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+        ctx.fillStyle = s.gold
+          ? `rgba(240,180,41,${s.a * 0.9})`
+          : `rgba(220,220,255,${s.a * 0.85})`;
+        ctx.fill();
+      }
+
+      // Étoiles filantes
+      shooterTimer++;
+      if (shooterTimer > 180 + Math.random() * 200) {
+        shooters.push(mkShooter());
+        shooterTimer = 0;
+      }
+
+      for (let i = shooters.length - 1; i >= 0; i--) {
+        const s = shooters[i];
+        s.x += s.vx; s.y += s.vy; s.life -= s.decay;
+        if (s.life <= 0) { shooters.splice(i, 1); continue; }
+
+        const grad = ctx.createLinearGradient(
+          s.x, s.y,
+          s.x - s.vx * (s.len / Math.hypot(s.vx, s.vy)),
+          s.y - s.vy * (s.len / Math.hypot(s.vx, s.vy))
+        );
+        grad.addColorStop(0, `rgba(240,200,100,${s.life * 0.9})`);
+        grad.addColorStop(1, 'rgba(240,200,100,0)');
+
+        ctx.beginPath();
+        ctx.moveTo(s.x, s.y);
+        ctx.lineTo(
+          s.x - s.vx * (s.len / Math.hypot(s.vx, s.vy)),
+          s.y - s.vy * (s.len / Math.hypot(s.vx, s.vy))
+        );
+        ctx.strokeStyle = grad;
+        ctx.lineWidth = 1.5 * s.life;
+        ctx.stroke();
+      }
+
+      requestAnimationFrame(draw);
+    }
+
+    window.addEventListener('resize', () => { resize(); initStars(); });
+    resize();
+    initStars();
+    requestAnimationFrame(draw);
+  </script>
+
+  <script src="img-overrides.js"></script>
+
+  <script src="auth.js"></script>
+  <script src="responsive.js"></script>
+</body>
+</html>
