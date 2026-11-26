@@ -668,3 +668,35 @@ footer p {
   transition: filter 0.2s, transform 0.2s;
 }
 .rt-dl-btn:hover, .rt-dl-btn:focus-visible { filter: brightness(1.15); transform: translateY(-2px); }
+
+/* En-tête de partie (recrutement en plusieurs parties) */
+.rt-part { display: flex; flex-direction: column; align-items: center; gap: 6px; margin: 18px 0 2px; text-align: center; }
+.rt-part-tag {
+  font-family: 'Orbitron', sans-serif; font-size: 0.66rem; letter-spacing: 0.25em; text-transform: uppercase;
+  padding: 3px 12px; border-radius: 999px; color: var(--bg); background: var(--gold);
+}
+.rt-part h2 { font-family: 'Orbitron', sans-serif; font-size: 1.15rem; letter-spacing: 0.08em; color: var(--text); }
+
+/* Sous-liste dans une règle */
+.rt-sublist { margin: 4px 0 0 18px; display: grid; gap: 2px; list-style: disc; }
+.rt-sublist li { font-size: 0.85rem; color: var(--text-dim); }
+.rt-sublist li::marker { color: var(--gold); }
+
+/* Liste numérotée simple */
+.rt-list { padding-left: 22px; display: grid; gap: 4px; }
+.rt-list li { font-size: 0.88rem; line-height: 1.65; }
+.rt-list li::marker { color: var(--gold); font-weight: 600; }
+
+/* Encadré d'information / d'alerte */
+.rt-note {
+  padding: 10px 14px; border-left: 3px solid var(--gold); border-radius: 0 8px 8px 0;
+  background: rgba(240,180,41,0.07); font-size: 0.86rem; line-height: 1.6;
+}
+.rt-note-alert { border-left-color: #e05555; background: rgba(224,85,85,0.1); font-weight: 600; }
+
+/* Encadré de scénario de mission */
+.rt-mission {
+  display: flex; flex-direction: column; gap: 8px; padding: 14px 16px; border-radius: 10px;
+  border: 1px solid var(--of-border-hi); background: rgba(0,200,255,0.04);
+}
+.rt-mission p { font-size: 0.88rem; line-height: 1.6; }
